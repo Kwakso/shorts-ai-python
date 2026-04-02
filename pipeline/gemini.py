@@ -31,7 +31,7 @@ async def generate_script(topic: str, style: str, language: str = "ko") -> dict:
         contents=prompt,
         config=genai.types.GenerateContentConfig(
             response_mime_type="application/json",
-            max_output_tokens=1024,
+            max_output_tokens=4096,
             temperature=0.7,
         ),
     )
