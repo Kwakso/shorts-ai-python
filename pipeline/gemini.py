@@ -1,9 +1,9 @@
-import google.generativeai as genai
+import google.genai as genai
 import os, json, re
 from dotenv import load_dotenv
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 STYLE_PROMPTS = {
     "cinematic": "Cinematic film quality, dramatic lighting, Hollywood style",
@@ -13,14 +13,6 @@ STYLE_PROMPTS = {
 }
 
 async def generate_script(topic: str, style: str, language: str = "ko") -> dict:
-    model = genai.GenerativeModel(
-        "gemini-2.0-flash",
-        generation_config={
-            "max_output_tokens": 2048,
-            "temperature": 0.7,
-            "response_mime_type": "application/json",
-        }
-    )
     style_guide = STYLE_PROMPTS.get(style, STYLE_PROMPTS["documentary"])
     lang = "한국어" if language == "ko" else "English"
 
@@ -34,6 +26,14 @@ async def generate_script(topic: str, style: str, language: str = "ko") -> dict:
   "tags": ["태그1", "Shorts", "YouTubeShorts"]
 }}"""
 
-    response = model.generate_content(prompt)
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+        config=genai.types.GenerateContentConfig(
+            response_mime_type="application/json",
+            max_output_tokens=1024,
+            temperature=0.7,
+        ),
+    )
     text = re.sub(r'```json\n?|```\n?', '', response.text).strip()
     return json.loads(text)
