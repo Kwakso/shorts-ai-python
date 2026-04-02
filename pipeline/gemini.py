@@ -36,4 +36,5 @@ async def generate_script(topic: str, style: str, language: str = "ko") -> dict:
         ),
     )
     text = re.sub(r'```json\n?|```\n?', '', response.text).strip()
+    print(f"[Gemini 응답]: {text[:300]}")  # ← 추가
     return json.loads(text)
