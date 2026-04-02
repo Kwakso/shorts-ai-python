@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 import os
+os.environ['PYTHONUNBUFFERED'] = '1'
 
 app = FastAPI()
 
