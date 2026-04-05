@@ -1,17 +1,12 @@
 FROM python:3.11-slim
 
-# ffmpeg + 한글 폰트(나눔고딕) 설치
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     fonts-nanum \
-    fonts-nanum-coding \
     fonts-nanum-extra \
     fontconfig \
     && fc-cache -fv \
     && rm -rf /var/lib/apt/lists/*
-
-# 폰트 설치 확인
-RUN fc-list | grep -i nanum
 
 WORKDIR /app
 
@@ -22,7 +17,6 @@ COPY . .
 
 RUN mkdir -p tmp output
 
-# 환경변수
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
